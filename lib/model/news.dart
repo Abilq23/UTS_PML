@@ -4,13 +4,14 @@ class News {
   final String content;
   final String date;
   final String? imageId;
+  final String? bucketId;
 
   News({
     required this.id,
     required this.title,
     required this.content,
     required this.date,
-    this.imageId,
+    this.imageId,this.bucketId
   });
 
   factory News.fromMap(Map<String, dynamic> data) {
@@ -20,6 +21,7 @@ class News {
       content: data['content'],
       date: data['date'],
       imageId: data['imageId'],
+      bucketId: data['bucketId'],
     );
   }
 }

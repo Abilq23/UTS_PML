@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:uts_abil/model/news.dart';
+import 'package:uts_abil/screen/edit.dart';
+import 'package:uts_abil/screen/home.dart';
+import 'package:uts_abil/service/appwrite.dart';
 
 class NewsDetailPage extends StatelessWidget {
   final News news;
 
-  const NewsDetailPage({Key? key, required this.news}) : super(key: key);
+  const NewsDetailPage({super.key, required this.news});
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +20,7 @@ class NewsDetailPage extends StatelessWidget {
         backgroundColor: Colors.blue[900],
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
+       
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -26,7 +30,7 @@ class NewsDetailPage extends StatelessWidget {
             // Image Section
             if (news.imageId != null)
               Image.network(
-                'https://cloud.appwrite.io/v1/storage/buckets/671debf8002df8ba343b/files/${news.imageId}/view?project=671de765000f68228902',
+                news.imageId ?? '',
                 width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,

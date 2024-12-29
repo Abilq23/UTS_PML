@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:uts_abil/model/news.dart';
 import 'package:uts_abil/model/user.dart';
+import 'package:uts_abil/screen/add.dart';
+import 'package:uts_abil/screen/edit.dart';
 import 'package:uts_abil/screen/news_detail.dart';
 import 'package:uts_abil/service/appwrite.dart';
 
@@ -183,100 +185,188 @@ class _HomePageState extends State<HomePage> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16),
                                 ),
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            NewsDetailPage(news: news),
-                                      ),
-                                    );
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            const BorderRadius.vertical(
-                                          top: Radius.circular(16),
-                                        ),
-                                        child: news.imageId != null
-                                            ? Image.network(
-                                                'https://cloud.appwrite.io/v1/storage/buckets/671debf8002df8ba343b/files/${news.imageId}/view?project=671de765000f68228902',
-                                                width: double.infinity,
-                                                height: 200,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Container(
-                                                height: 200,
-                                                color: Colors.grey[300],
-                                                child: const Icon(
-                                                  Icons.image,
-                                                  size: 100,
-                                                ),
-                                              ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(16),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              news.title,
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                child: Stack(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                NewsDetailPage(news: news),
+                                          ),
+                                        );
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.vertical(
+                                              top: Radius.circular(16),
                                             ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              news.content,
-                                              maxLines: 3,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                color: Colors.grey[600],
-                                              ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                            child: news.imageId != null
+                                                ? Image.network(
+                                                    news.imageId ?? '',
+                                                    width: double.infinity,
+                                                    height: 200,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Container(
+                                                    height: 200,
+                                                    color: Colors.grey[300],
+                                                    child: const Icon(
+                                                      Icons.image,
+                                                      size: 100,
+                                                    ),
+                                                  ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(16),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  news.date,
+                                                  news.title,
+                                                  style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  news.content,
+                                                  maxLines: 3,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                     color: Colors.grey[600],
                                                   ),
                                                 ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            NewsDetailPage(
-                                                                news: news),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      news.date,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
                                                       ),
-                                                    );
-                                                  },
-                                                  child: Text(
-                                                    'Baca Selengkapnya',
-                                                    style: TextStyle(
-                                                      color: Colors.blue[900],
                                                     ),
-                                                  ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                NewsDetailPage(
+                                                                    news: news),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: Text(
+                                                        'Baca Selengkapnya',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Colors.blue[900],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    _user?.name == 'admin'
+                                        ? Positioned(
+                                            right: 8,
+                                            top: 8,
+                                            child: Row(
+                                              children: [
+                                                IconButton(
+                                                  icon: const Icon(
+                                                    Icons.edit,
+                                                    color: Colors.blue,
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                UpdateNewsPage(
+                                                                    news:
+                                                                        news)));
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  width: 8.0,
+                                                ),
+                                                IconButton(
+                                                  icon: const Icon(
+                                                    Icons.delete,
+                                                    color: Colors.red,
+                                                  ),
+                                                  onPressed: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          title: const Text(
+                                                              'Konfirmasi'),
+                                                          content: const Text(
+                                                              'Apakah Anda yakin ingin menghapus berita ini?'),
+                                                          actions: [
+                                                            TextButton(
+                                                              child: const Text(
+                                                                  'Batal'),
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                            ),
+                                                            TextButton(
+                                                              child: const Text(
+                                                                  'Hapus'),
+                                                              onPressed: () {
+                                                                AppwriteService()
+                                                                    .deleteNews(
+                                                                        news.id);
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                  const SnackBar(
+                                                                    content: Text(
+                                                                        'Berita berhasil di hapus'),
+                                                                  ),
+                                                                );
+                                                                Navigator.pushReplacement(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                const HomePage()));
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Container(),
+                                  ],
                                 ),
                               );
                             },
@@ -286,6 +376,29 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+      floatingActionButton: _user?.name == 'admin'
+          ? FloatingActionButton.extended(
+              backgroundColor: Colors.blue[900],
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddNewsPage(),
+                  ),
+                );
+              },
+              label: const Text(
+                'Tambah ',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              icon: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            )
+          : null,
     );
   }
 }
